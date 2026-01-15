@@ -17,7 +17,7 @@ export default function Navbar() {
           <Link
             to={"/"}
             onClick={() => setIsModal(false)}
-            className="cursor-pointer text-4xl font-bold text-white transition-transform hover:-translate-y-0.5 max-xl:text-xl max-lg:text-lg max-md:text-base"
+            className="cursor-pointer text-3xl font-bold text-white transition-transform hover:-translate-y-0.5 max-xl:text-xl max-lg:text-lg max-md:text-base max-sm:text-sm"
           >
             Simple Blog
           </Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
           <Link
             to={"/"}
             onClick={() => setIsModal(false)}
-            className="font-google-sans cursor-pointer text-4xl font-bold text-white transition-transform hover:-translate-y-0.5"
+            className="cursor-pointer text-4xl font-bold text-white transition-transform hover:-translate-y-0.5 max-xl:text-xl max-lg:text-lg"
           >
             Simple Blog
           </Link>

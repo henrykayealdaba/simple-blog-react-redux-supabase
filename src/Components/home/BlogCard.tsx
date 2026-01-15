@@ -6,9 +6,9 @@ export default function BlogCard({
   data: { title: string; body: string };
 }) {
   return (
-    <div className="flex max-h-40 max-w-60 min-w-30 cursor-pointer flex-col justify-between rounded-sm bg-gray-50 p-2 shadow transition-colors duration-75 ease-in-out hover:bg-gray-100">
+    <div className="flex h-52 w-52 min-w-32 cursor-pointer flex-col justify-between rounded-sm bg-gray-50 p-2 shadow transition-colors duration-75 ease-in-out hover:bg-gray-100">
       <div>
-        <p className="font-serif text-xl font-bold wrap-break-word">
+        <p className="line-clamp-2 font-serif text-xl font-bold wrap-break-word">
           {data.title}
         </p>
         <p className="line-clamp-3 wrap-break-word">{data.body}</p>

@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import BlogDetails from "./pages/BlogDetails";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -74,7 +75,8 @@ function App() {
                 <Home />
               </PrivateRoute>
             }
-          ></Route>
+          />
+          <Route path="/blog/:id" element={<BlogDetails />} />
           <Route
             path="/register"
             element={
@@ -82,7 +84,7 @@ function App() {
                 <Register />
               </PublicRoute>
             }
-          ></Route>
+          />
           <Route
             path="/login"
             element={
@@ -90,7 +92,7 @@ function App() {
                 <Login />
               </PublicRoute>
             }
-          ></Route>
+          />
         </Routes>
       </div>
     </>

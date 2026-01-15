@@ -2,7 +2,6 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import type { RootState } from "../../redux/app/store";
 import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Pagination from "./Pagination";
 import type { Dispatch, SetStateAction } from "react";
@@ -18,7 +17,6 @@ export default function CreateBlog({
   totalPages: number;
   onInsertPost: (title: string, body: string) => Promise<void>;
 }) {
-  // const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -40,8 +38,6 @@ export default function CreateBlog({
         success: "New blog posted!",
         error: "Blog insert error!",
       });
-
-      // navigate(0);
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -52,7 +48,7 @@ export default function CreateBlog({
   };
 
   return (
-    <div className="flex w-72 flex-col flex-wrap gap-4">
+    <div className="flex w-72 flex-col flex-wrap items-center gap-4">
       <form
         onSubmit={handleSubmit}
         className="h-[48dvh] space-y-4 rounded-sm bg-gray-50 p-2 shadow"
@@ -104,6 +100,7 @@ export default function CreateBlog({
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       />
+      <p className="">Made by Henry Kaye ❤️</p>
     </div>
   );
 }

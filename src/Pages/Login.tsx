@@ -41,7 +41,7 @@ export default function Login() {
       setPassword("");
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setEmail("");
       setPassword("");
       setMessage("Something went wrong!");

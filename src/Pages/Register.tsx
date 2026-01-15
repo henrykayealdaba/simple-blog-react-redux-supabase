@@ -40,7 +40,7 @@ export default function Register() {
       setConfirmPassword("");
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       if (error instanceof Error) {
         setMessage(error.message);

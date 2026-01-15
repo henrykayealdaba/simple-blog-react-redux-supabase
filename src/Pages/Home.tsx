@@ -34,7 +34,6 @@ export default function Home() {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        console.log(data);
         setPosts(data || []);
       } catch (error) {
         console.error("Error fetching posts: ", error);
@@ -46,11 +45,11 @@ export default function Home() {
     fetchPosts();
   }, [user]);
 
-  const totalPages = Math.ceil(posts.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(posts.length / ITEMS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = posts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const insertPost = async (title: string, body: string) => {
+  async function insertPost(title: string, body: string) {
     if (!user) return;
 
     const { data, error } = await supabase
@@ -66,7 +65,29 @@ export default function Home() {
     if (error) throw error;
 
     setPosts((prev) => [data, ...prev]);
-  };
+  }
+
+  async function updatePost(id: string, title: string, body: string) {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("posts")
+      .update({ title, body })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    setPosts((prev) => prev.map((post) => (post.id === id ? data : post)));
+  }
+
+  async function deletePost(id: string) {
+    const { error } = await supabase.from("posts").delete().eq("id", id);
+
+    if (error) throw error;
+    setPosts((prev) => prev.filter((post) => post.id !== id));
+  }
 
   return (
     <div className="flex h-screen w-screen space-x-4 p-4">
@@ -76,7 +97,13 @@ export default function Home() {
         totalPages={totalPages}
         onInsertPost={insertPost}
       />
-      <ViewCard currentItems={currentItems} loading={loading} posts={posts} />
+      <ViewCard
+        currentItems={currentItems}
+        loading={loading}
+        posts={posts}
+        onUpdatePost={updatePost}
+        onDeletePost={deletePost}
+      />
     </div>
   );
 }

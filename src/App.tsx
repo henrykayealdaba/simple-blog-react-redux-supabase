@@ -3,6 +3,13 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { supabase } from "./lib/supabase";
+import { clearUser, setUser } from "./redux/auth/authSlice";
+import PublicRoute from "./redux/routes/PublicRoute";
+import PrivateRoute from "./redux/routes/PrivateRoute";
 
 function App() {
   /*
@@ -16,14 +23,74 @@ function App() {
 
   */
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error("Session error: ", error);
+          dispatch(clearUser());
+          return;
+        }
+
+        dispatch(setUser(data.session?.user ?? null));
+      } catch (error) {
+        console.error("Unexpected auth error: ", error);
+        dispatch(clearUser());
+      }
+    };
+
+    initAuth();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      try {
+        dispatch(setUser(session?.user ?? null));
+      } catch (err) {
+        console.error("Auth state change error:", err);
+        dispatch(clearUser());
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [dispatch]);
+
   return (
     <>
       <div className="font-google-sans h-dvh w-screen">
+        <Toaster position="bottom-center" />
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          ></Route>
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          ></Route>
         </Routes>
       </div>
     </>

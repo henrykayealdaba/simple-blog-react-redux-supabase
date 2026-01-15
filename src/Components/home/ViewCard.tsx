@@ -1,6 +1,16 @@
 import BlogCard from "./BlogCard";
 import { ArrowRight, ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabase";
+import { UseSelector } from "react-redux";
+import type { RootState } from "../../redux/app/store";
+
+type Post = {
+  id: string;
+  title: string;
+  body: string;
+  created_at: string;
+};
 
 export default function ViewCard() {
   // TODO: Replace this using supabase data

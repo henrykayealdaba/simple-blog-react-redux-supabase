@@ -50,12 +50,31 @@ export default function Home() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = posts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+  const insertPost = async (title: string, body: string) => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("posts")
+      .insert({
+        title,
+        body,
+        user_id: user.id,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    setPosts((prev) => [data, ...prev]);
+  };
+
   return (
     <div className="flex h-screen w-screen space-x-4 p-4">
       <CreateBlog
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
+        onInsertPost={insertPost}
       />
       <ViewCard currentItems={currentItems} loading={loading} posts={posts} />
     </div>

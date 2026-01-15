@@ -1,6 +1,5 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
 import type { RootState } from "../../redux/app/store";
 import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
@@ -12,10 +11,12 @@ export default function CreateBlog({
   currentPage,
   setCurrentPage,
   totalPages,
+  onInsertPost,
 }: {
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   totalPages: number;
+  onInsertPost: (title: string, body: string) => Promise<void>;
 }) {
   // const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
@@ -34,17 +35,7 @@ export default function CreateBlog({
       setLoading(true);
       setError(null);
 
-      const insertPost = async () => {
-        const { error } = await supabase.from("posts").insert({
-          title,
-          body,
-          user_id: user.id,
-        });
-
-        if (error) throw error;
-      };
-
-      await toast.promise(insertPost(), {
+      await toast.promise(onInsertPost(title, body), {
         loading: "Inserting blog...",
         success: "New blog posted!",
         error: "Blog insert error!",

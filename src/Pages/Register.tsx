@@ -1,3 +1,3 @@
 export default function Register() {
-  return <div>This is the register page</div>;
+  return <div className="flex items-center justify-center p-4"></div>;
 }
